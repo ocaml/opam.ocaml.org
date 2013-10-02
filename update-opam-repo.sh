@@ -10,6 +10,8 @@ WWW=~/www
 
 WWW_NEW=~/www-new
 
+WWW_BAK=~/www-bak
+
 TEST=""
 while [ $# -gt 0 ]; do
     case $1 in
@@ -25,15 +27,20 @@ done
 
 git clone --local $WWW $WWW_NEW
 
+if [ -z "$TEST" ]; then
+    trap "rm -rf $WWW_NEW" ERR
+fi
+
 cd $WWW_NEW
 git fetch $REPO master
 git reset FETCH_HEAD --hard
 
 mkdir -p $WWW_NEW/archives
-cp -l $WWW/archives/* $WWW_NEW/archives/
+cp -al $WWW/archives/* $WWW_NEW/archives/
 cp $WWW/index.tar.gz $WWW/urls.txt $WWW_NEW
 
 cd $WWW_NEW
+umask 002
 $BIN/opam-admin make
 
 CONTENT=$(mktemp -d /tmp/opam2web-content.XXXX)
@@ -48,10 +55,12 @@ $BIN/opam2web \
     --prefix "$URL" \
     path:.
 
+cp -r ~/git/opam2web/ext $WWW_NEW
+
 cd
 
 if [ -z "$TEST" ]; then
-    mv $WWW $WWW.bak
+    rm -rf $WWW_BAK
+    mv $WWW $WWW_BAK
     mv $WWW_NEW $WWW
-    rm -rf $WWW.bak
 fi
