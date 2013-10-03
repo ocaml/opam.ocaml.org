@@ -1,15 +1,8 @@
 #!/bin/bash -ue
 
-MAINLOG=/tmp/cron-$(date +%Y-%m).log
+MAINLOG=~/var/log/cron-$(date +%Y-%m).log
 
-LOG=$(mktemp /tmp/cron-job.XXXXX)
-
-EMAIL="louis.gesbert@ocamlpro.com"
-
-PATH=/usr/local/bin:/usr/bin:/bin
-. ~/.opam/opam-init/init.sh || true
-
-NAME=$1; shift
+LOG=$(mktemp ~/var/log/cron-job.XXXXX)
 
 atexit() {
     cat $LOG >> $MAINLOG
@@ -17,10 +10,19 @@ atexit() {
 }
 trap atexit EXIT
 
+EMAIL="louis.gesbert@ocamlpro.com"
+
+PATH=/usr/local/bin:/usr/bin:/bin
+. ~/.opam/opam-init/init.sh || true
+export PATH
+
+NAME=$1; shift
+COMMAND=("$@")
+
 report_error () {
     {
         echo "Job $NAME failed with code $?."
-        echo "Full command was: $*"
+        echo "Full command was: ${COMMAND[*]}"
         echo
         echo "=== FULL LOG ==="
         echo
