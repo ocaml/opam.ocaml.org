@@ -20,17 +20,13 @@ echo "======== RUNNING COMMAND: $* ========"
 echo "==> $(date --rfc-3339=seconds)"
 echo
 
-PATH=/usr/local/bin:/usr/bin:/bin
-. ~/.opam/opam-init/init.sh || true
-export PATH
-
-NAME="$1"; shift
-COMMAND=("$@")
-
 report_error () {
+    set +e
+    echo
+    echo "======== CRON JOB FAILED ========"
     {
-        echo "Job $NAME failed with code $?."
-        echo "Full command was: ${COMMAND[*]}"
+        echo "Job $NAME FAILED."
+        echo "Full command was: $COMMAND"
         echo
         echo "=== FULL LOG ==="
         echo
@@ -41,7 +37,14 @@ report_error () {
 }
 trap report_error ERR
 
-"${COMMAND[@]}"
+NAME="$1"; shift
+COMMAND="$*"
+
+PATH=/usr/local/bin:/usr/bin:/bin
+export PATH
+eval $(opam config env)
+
+"$@"
 
 echo
 echo "======== CRON JOB SUCCESSFUL ========"
