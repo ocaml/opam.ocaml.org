@@ -6,6 +6,9 @@ LOG=$(mktemp /tmp/cron-job.XXXXX)
 
 EMAIL="louis.gesbert@ocamlpro.com"
 
+PATH=/usr/local/bin:/usr/bin:/bin
+. ~/.opam/opam-init/init.sh || true
+
 NAME=$1; shift
 
 atexit() {
