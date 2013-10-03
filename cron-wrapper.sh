@@ -4,19 +4,27 @@ MAINLOG=~/var/log/cron-$(date +%Y-%m).log
 
 LOG=$(mktemp ~/var/log/cron-job.XXXXX)
 
+EMAIL="louis.gesbert@ocamlpro.com"
+
 atexit() {
     cat $LOG >> $MAINLOG
+    echo >> $MAINLOG
     rm $LOG
 }
 trap atexit EXIT
 
-EMAIL="louis.gesbert@ocamlpro.com"
+exec >$LOG 2>&1
+
+echo
+echo "======== RUNNING COMMAND: $* ========"
+echo "==> $(date --rfc-3339=seconds)"
+echo
 
 PATH=/usr/local/bin:/usr/bin:/bin
 . ~/.opam/opam-init/init.sh || true
 export PATH
 
-NAME=$1; shift
+NAME="$1"; shift
 COMMAND=("$@")
 
 report_error () {
@@ -33,16 +41,7 @@ report_error () {
 }
 trap report_error ERR
 
+"${COMMAND[@]}"
 
-{
-    echo
-    echo "======== RUNNING COMMAND: $* ========"
-    echo "==> $(date --rfc-3339=seconds)"
-    echo
-
-    "$@"
-
-    echo
-    echo "======== CRON JOB SUCCESSFUL ========"
-    echo
-} >>$LOG 2>&1
+echo
+echo "======== CRON JOB SUCCESSFUL ========"
