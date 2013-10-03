@@ -1,4 +1,4 @@
-#!/bin/bash -ue
+#!/bin/bash -u
 
 MAINLOG=~/var/log/cron-$(date +%Y-%m).log
 
@@ -18,10 +18,11 @@ exec >$LOG 2>&1
 echo
 echo "======== RUNNING COMMAND: $* ========"
 echo "==> $(date --rfc-3339=seconds)"
-echo
+
+NAME="$1"; shift
+COMMAND="$*"
 
 report_error () {
-    set +e
     echo
     echo "======== CRON JOB FAILED ========"
     {
@@ -34,15 +35,18 @@ report_error () {
     } | mail "$EMAIL" \
         -a'From: cron@opam.ocaml.org' \
         -s"Cron job $NAME failed on opam.ocaml.org"
+    exit 1
 }
 trap report_error ERR
 
-NAME="$1"; shift
-COMMAND="$*"
+echo "==> Load opam env"
 
-PATH=/usr/local/bin:/usr/bin:/bin
+PATH=~/local/bin:/usr/local/bin:/usr/bin:/bin
 export PATH
 eval $(opam config env)
+
+echo "==> Running $COMMAND"
+echo
 
 "$@"
 

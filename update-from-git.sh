@@ -17,7 +17,18 @@ git clean -fdx
 git checkout master
 git reset origin/master --hard
 
-export PREFIX=~/local
-if [ -x configure ]; then ./configure -prefix ~/local; fi
-make
-make install
+case $repo in
+    "opam")
+        make prepare
+        ./configure -prefix ~/local
+        make compile
+        make install libinstall
+        ;;
+    "opam2web")
+        export PREFIX=~/local
+        make
+        make install
+        ;;
+    *)
+        echo "$repo fetched, don't know how to build"
+esac
