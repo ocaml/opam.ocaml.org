@@ -1,5 +1,9 @@
 #!/bin/bash -u
 
+PATH="$HOME/local/bin:/usr/local/bin:/usr/bin:/bin"
+export PATH
+export HOME
+
 MAINLOG=~/var/log/cron-$(date +%Y-%m).log
 
 LOG=$(mktemp ~/var/log/cron-job.XXXXX)
@@ -41,8 +45,6 @@ trap report_error ERR
 
 echo "==> Load opam env"
 
-PATH=~/local/bin:/usr/local/bin:/usr/bin:/bin
-export PATH
 eval $(opam config env)
 
 echo "==> Running $COMMAND"
