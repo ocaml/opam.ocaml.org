@@ -1,9 +1,11 @@
-#!/bin/bash -u
+#!/bin/bash -ue
 
 HOME="/home/opam"
 PATH="$HOME/local/bin:/usr/local/bin:/usr/bin:/bin"
 export HOME
 export PATH
+
+umask 0022
 
 MAINLOG=~/var/log/cron-$(date +%Y-%m).log
 
