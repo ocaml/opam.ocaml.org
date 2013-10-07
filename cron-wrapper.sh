@@ -2,16 +2,18 @@
 
 HOME="/home/opam"
 PATH="$HOME/local/bin:/usr/local/bin:/usr/bin:/bin"
+OCAMLRUNPARAM=b
 export HOME
 export PATH
+export OCAMLRUNPARAM
 
 umask 0022
+
+EMAIL="opam-commits@lists.ocaml.org"
 
 MAINLOG=~/var/log/cron-$(date +%Y-%m).log
 
 LOG=$(mktemp ~/var/log/cron-job.XXXXX)
-
-EMAIL="opam-commits@lists.ocaml.org"
 
 atexit() {
     cat $LOG >> $MAINLOG
@@ -24,7 +26,8 @@ trap atexit EXIT
 exec >$LOG 2>&1
 
 echo
-echo "======== RUNNING COMMAND: $* ======== {{{"
+echo "======== RUNNING COMMAND: $* ========"
+echo "{{{"
 echo "==> $(date --rfc-3339=seconds)"
 
 NAME="$1"; shift
