@@ -11,7 +11,7 @@ MAINLOG=~/var/log/cron-$(date +%Y-%m).log
 
 LOG=$(mktemp ~/var/log/cron-job.XXXXX)
 
-EMAIL="louis.gesbert@ocamlpro.com"
+EMAIL="opam-commits@lists.ocaml.org"
 
 atexit() {
     cat $LOG >> $MAINLOG
