@@ -55,7 +55,7 @@ $BIN/opam2web \
     --prefix "$URL" \
     path:.
 
-cp -r ~/git/opam2web/ext $WWW_NEW
+cp -r -L ~/git/opam2web/ext $WWW_NEW
 
 cd
 
