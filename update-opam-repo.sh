@@ -2,7 +2,7 @@
 
 cd
 
-REPO=git://github.com/OCamlPro/opam-repository.git
+REPO=git://github.com/ocaml/opam-repository.git
 URL=http://opam.ocaml.org/
 BIN=~/local/bin
 
