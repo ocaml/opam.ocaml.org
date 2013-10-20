@@ -41,7 +41,7 @@ cp $WWW/index.tar.gz $WWW/urls.txt $WWW_NEW
 
 cd $WWW_NEW
 umask 002
-$BIN/opam-admin make | tee $WWW_NEW/lastlog
+$BIN/opam-admin make |& tee $WWW_NEW/lastlog.txt
 
 CONTENT=$(mktemp -d /tmp/opam2web-content.XXXX)
 cp -r ~/git/opam2web/content/* $CONTENT
