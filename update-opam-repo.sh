@@ -35,25 +35,30 @@ cd $WWW_NEW
 git fetch $REPO master
 git reset FETCH_HEAD --hard
 
-mkdir -p $WWW_NEW/archives
-cp -al $WWW/archives/* $WWW_NEW/archives/
-cp $WWW/index.tar.gz $WWW/urls.txt $WWW_NEW
+mkdir -p archives
+cp -al $WWW/archives/* archives/
+cp $WWW/index.tar.gz $WWW/urls.txt .
 
-cd $WWW_NEW
 umask 002
-$BIN/opam-admin make |& tee $WWW_NEW/lastlog.txt
+date > $WWW_NEW/lastlog.txt
+echo >> $WWW_NEW/lastlog.txt
+echo "============= opam-admin make ============" >> $WWW_NEW/lastlog.txt
+$BIN/opam-admin make |& tee -a $WWW_NEW/lastlog.txt
 
 CONTENT=$(mktemp -d /tmp/opam2web-content.XXXX)
 cp -r ~/git/opam2web/content/* $CONTENT
 git clone https://github.com/OCamlPro/opam.wiki.git $CONTENT/doc
 trap "rm -rf /tmp/${CONTENT#/tmp/}" EXIT
 
+echo >> $WWW_NEW/lastlog.txt
+echo "================ opam2web ================" >> $WWW_NEW/lastlog.txt
 $BIN/opam2web \
     --content $CONTENT \
     --statistics ~/var/log/access.log.1 \
     --statistics ~/var/log/access.log \
     --prefix "$URL" \
-    path:.
+    path:. \
+    |& tee -a $WWW_NEW/lastlog.txt
 
 cp -r -L ~/git/opam2web/ext $WWW_NEW
 
