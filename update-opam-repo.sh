@@ -54,7 +54,7 @@ echo >> $WWW_NEW/lastlog.txt
 echo "================ opam2web ================" >> $WWW_NEW/lastlog.txt
 $BIN/opam2web \
     --content $CONTENT \
-    --statistics ~/var/log/access.log.1 \
+    --statistics ~/var/log/ocamlpro/access.log \
     --statistics ~/var/log/access.log \
     --prefix "$URL" \
     path:. \
