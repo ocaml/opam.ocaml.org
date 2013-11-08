@@ -56,7 +56,6 @@ $BIN/opam2web \
     --content $CONTENT \
     --statistics ~/var/log/ocamlpro/access.log \
     --statistics ~/var/log/access.log \
-    --prefix "$URL" \
     path:. \
     |& tee -a $WWW_NEW/lastlog.txt
 
