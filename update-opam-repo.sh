@@ -1,4 +1,7 @@
-#!/bin/bash -ueo pipefail
+#!/bin/bash -ue
+
+# Make sure piping through tee doesn't lose error exit status of the command
+set -o pipefail
 
 cd
 
