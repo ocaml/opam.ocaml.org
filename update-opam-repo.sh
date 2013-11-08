@@ -1,4 +1,4 @@
-#!/bin/bash -ue
+#!/bin/bash -ueo pipefail
 
 cd
 
