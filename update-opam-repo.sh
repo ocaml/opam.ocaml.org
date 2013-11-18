@@ -6,6 +6,7 @@ set -o pipefail
 cd
 
 REPO=git://github.com/ocaml/opam-repository.git
+BRANCH=master
 URL=http://opam.ocaml.org/
 BIN=~/local/bin
 
@@ -20,9 +21,11 @@ while [ $# -gt 0 ]; do
     case $1 in
         --test)
             TEST=1
-            WWW_NEW=~/www-test;;
+            WWW_NEW=~/www-test
+            if [ $# -gt 1 ]; then shift; BRANCH="$1"; fi
+            ;;
         *)
-            echo "Bad argument $1. Known option: --test."
+            echo "Bad argument $1. Known option: --test [branch]."
             exit 2;;
     esac
     shift
@@ -35,7 +38,7 @@ if [ -z "$TEST" ]; then
 fi
 
 cd $WWW_NEW
-git fetch $REPO master
+git fetch $REPO $BRANCH
 git reset FETCH_HEAD --hard
 
 mkdir -p archives
