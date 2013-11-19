@@ -74,3 +74,6 @@ if [ -z "$TEST" ]; then
     mv $WWW $WWW_BAK
     mv $WWW_NEW $WWW
 fi
+
+echo "SUCCESS" >> $WWW_NEW/lastlog.txt
+date >> $WWW_NEW/lastlog.txt
