@@ -78,11 +78,11 @@ cp -r -L ~/git/opam2web/ext $WWW_NEW
 
 cd
 
+echo "SUCCESS" >> $WWW_NEW/lastlog.txt
+date >> $WWW_NEW/lastlog.txt
+
 if [ -z "$TEST" ]; then
     rm -rf $WWW_BAK
     mv $WWW $WWW_BAK
     mv $WWW_NEW $WWW
 fi
-
-echo "SUCCESS" >> $WWW_NEW/lastlog.txt
-date >> $WWW_NEW/lastlog.txt
