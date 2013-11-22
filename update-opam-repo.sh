@@ -65,16 +65,17 @@ $BIN/opam2web \
     path:. \
     |& tee -a $WWW_NEW/lastlog.txt
 
-echo >> $WWW_NEW/lastlog.txt
-echo "================ opam2web (1.0) ================" >> $WWW_NEW/lastlog.txt
-mkdir -p "1.0" && cd "1.0"
-$BIN/opam2web \
-    --content $CONTENT \
-    --statistics ~/var/log/ocamlpro/access.log \
-    path:.. \
-    |& tee -a $WWW_NEW/lastlog.txt
-
 cp -r -L ~/git/opam2web/ext $WWW_NEW
+
+# echo >> $WWW_NEW/lastlog.txt
+# echo "================ opam2web (1.0) ================" >> $WWW_NEW/lastlog.txt
+# mkdir -p "1.0" && cd "1.0"
+# $BIN/opam2web \
+#     --content $CONTENT \
+#     --statistics ~/var/log/ocamlpro/access.log \
+#     path:.. \
+#     |& tee -a $WWW_NEW/lastlog.txt
+# ln -s ../ext .
 
 cd
 
