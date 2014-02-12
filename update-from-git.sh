@@ -24,6 +24,10 @@ case $repo in
         make compile
         make install libinstall
         ;;
+    "opamfu")
+        make build
+        make install
+        ;;
     "opam2web")
         export PREFIX=~/local
         make
