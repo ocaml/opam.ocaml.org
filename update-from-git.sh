@@ -25,6 +25,7 @@ case $repo in
         make install libinstall
         ;;
     "opamfu")
+        make uninstall || true
         make build
         make install
         ;;
