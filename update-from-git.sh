@@ -2,8 +2,14 @@
 
 repo=$1
 shift
+BRANCH=master
+if [ $# -gt 0 ]; then
+    BRANCH=$1
+    shift
+fi
 if [ $# -ne 0 ]; then
-    echo "Bad arguments. Syntax: $0 <repo>"
+    echo "Bad arguments. Syntax: $0 <repo> [branch]"
+    echo "Default branch is master"
     exit 2
 elif [ ! -d ~/git/$repo ]; then
     echo "Directory ~/git/$repo does not exist. Clone a repo by hand first."
@@ -15,7 +21,7 @@ cd ~/git/$repo
 git fetch
 git clean -fdx
 git checkout master
-git reset origin/master --hard
+git reset origin/$BRANCH --hard
 
 case $repo in
     "opam")
