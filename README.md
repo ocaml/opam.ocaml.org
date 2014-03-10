@@ -4,8 +4,9 @@ opam.ocaml.org is hosted on a Debian VM ; @avsm, @samoht and @AltGr have account
 ```
  ~opam
  |-- git
- |   |-- opam     (auto-updated, reset, complied and installed every night)
- |   |-- opam2web (auto-updated, reset, complied and installed every night)
+ |   |-- opam     (auto-updated, reset, compiled and installed every night)
+ |   |-- opamfu   (auto-updated, reset, compiled and installed every night)
+ |   |-- opam2web (auto-updated, reset, compiled and installed every night)
  |   `-- scripts  (version-controlled but without a master upstream atm. No auto-update)
  |-- local        (where the above are installed)
  |   |-- bin
