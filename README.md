@@ -7,9 +7,9 @@ opam.ocaml.org is hosted on a Debian VM ; @avsm, @samoht and @AltGr have account
  |   |-- opam     (auto-updated, reset, compiled and installed every night)
  |   |-- opamfu   (auto-updated, reset, compiled and installed every night)
  |   |-- opam2web (auto-updated, reset, compiled and installed every night)
- |   `-- scripts  (version-controlled but without a master upstream atm. No auto-update)
+ |   `-- scripts  (no auto-update: git pull manually)
  |-- local        (where the above are installed)
- |   |-- bin
+ |   |-- bin      (contains the binaries and symlinks to the scripts)
  |   `-- share
  |-- var
  |   `-- log      (holds both the apache logs and cron logs)
@@ -24,6 +24,10 @@ The scripts include:
 * `update-opam-repo.sh` synches the opam repo and web page (runs `opam-admin make` and `opam2web`)
 
 ## What is done manually
+* Update these scripts:
+```
+cd git/scripts && git pull
+```
 * Update the server config:
 ```
 cp nginx.conf /etc/nginx/sites-available/default
