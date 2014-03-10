@@ -37,6 +37,7 @@ case $repo in
         ;;
     "opam2web")
         export PREFIX=~/local
+        make uninstall || true
         make
         make install
         ;;
