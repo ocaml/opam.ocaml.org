@@ -37,7 +37,7 @@ case $repo in
         ;;
     "opam2web")
         export PREFIX=~/local
-        make uninstall || true
+        ocamlfind remove opam2web || true
         make
         make install
         ;;
