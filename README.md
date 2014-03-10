@@ -22,10 +22,13 @@ The scripts include:
 * `update-from-git.sh` synchronises sources in `git/` with git remotes
 * `update-opam-repo.sh` synches the opam repo and web page (runs `opam-admin make` and `opam2web`)
 
-The crontab is as follows:
+## What is done manually
+* Update the server config:
 ```
- # m h  dom mon dow   command
-   0 2  *   *   *     /home/opam/local/bin/cron-wrapper.sh update-opam update-from-git.sh opam
-   0 3  *   *   *     /home/opam/local/bin/cron-wrapper.sh update-opam2web update-from-git.sh opam2web
-  15 *  *   *   *     /home/opam/local/bin/cron-wrapper.sh update-opam-repo update-opam-repo.sh
+cp nginx.conf /etc/nginx/sites-available/default
+kill -HUP $(cat /var/run/nginx.pid)
+```
+* Update the crontab:
+```
+crontab crontab
 ```
