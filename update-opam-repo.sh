@@ -65,7 +65,7 @@ $BIN/opam2web \
     path:. \
     |& tee -a $WWW_NEW/lastlog.txt
 
-cp -r -L ~/git/opam2web/ext $WWW_NEW
+cp -r -L ~/local/share/opam2web $WWW_NEW
 
 # echo >> $WWW_NEW/lastlog.txt
 # echo "================ opam2web (1.0) ================" >> $WWW_NEW/lastlog.txt
