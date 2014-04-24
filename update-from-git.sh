@@ -40,7 +40,8 @@ case $repo in
         ocamlfind remove opam2web || true
         make
         make install
-        cp -r ext ~/local/share/opam2web
+        mkdir -p ~/local/share/opam2web
+        cp -r -L ext/* ~/local/share/opam2web
         ;;
     *)
         echo "$repo fetched, don't know how to build"
