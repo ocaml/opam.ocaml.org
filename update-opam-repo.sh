@@ -53,7 +53,7 @@ $BIN/opam-admin make |& tee -a $WWW_NEW/lastlog.txt
 
 CONTENT=$(mktemp -d /tmp/opam2web-content.XXXX)
 cp -r ~/git/opam2web/content/* $CONTENT
-git clone https://github.com/ocaml/opam.wiki.git $CONTENT/doc
+git clone git://github.com/ocaml/opam.wiki.git $CONTENT/doc
 trap "rm -rf /tmp/${CONTENT#/tmp/}" EXIT
 
 echo >> $WWW_NEW/lastlog.txt
