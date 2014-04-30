@@ -25,9 +25,8 @@ git reset origin/$BRANCH --hard
 
 case $repo in
     "opam")
-        make prepare
         ./configure -prefix ~/local
-        make compile
+        make
         make install libinstall
         ;;
     "opamfu")
