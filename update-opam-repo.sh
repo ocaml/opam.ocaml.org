@@ -7,7 +7,7 @@ cd
 
 REPO=git://github.com/ocaml/opam-repository.git
 BRANCH=master
-URL=http://opam.ocaml.org/
+URL=https://opam.ocaml.org/
 BIN=~/local/bin
 
 WWW=~/www
@@ -63,7 +63,7 @@ $BIN/opam2web \
     --content $CONTENT \
     --statistics ~/var/log/ocamlpro/access.log \
     --statistics ~/var/log/access.log \
-    --root "http://opam.ocaml.org" \
+    --root $URL \
     path:. \
     |& tee -a $WWW_NEW/lastlog.txt
 
