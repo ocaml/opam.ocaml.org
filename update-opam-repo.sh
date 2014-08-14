@@ -57,6 +57,8 @@ git clone git://github.com/ocaml/opam.wiki.git $CONTENT/doc
 git clone git://github.com/ocaml/platform-blog.git $CONTENT/blog
 trap "rm -rf /tmp/${CONTENT#/tmp/}" EXIT
 
+cp -r -L ~/local/share/opam2web $WWW_NEW/ext
+
 echo >> $WWW_NEW/lastlog.txt
 echo "================ opam2web ================" >> $WWW_NEW/lastlog.txt
 $BIN/opam2web \
@@ -66,8 +68,6 @@ $BIN/opam2web \
     --root $URL \
     path:. \
     |& tee -a $WWW_NEW/lastlog.txt
-
-cp -r -L ~/local/share/opam2web $WWW_NEW/ext
 
 # echo >> $WWW_NEW/lastlog.txt
 # echo "================ opam2web (1.0) ================" >> $WWW_NEW/lastlog.txt
