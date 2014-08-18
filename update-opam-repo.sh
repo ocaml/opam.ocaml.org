@@ -53,12 +53,12 @@ $BIN/opam-admin make |& tee -a $WWW_NEW/lastlog.txt
 
 CONTENT=$(mktemp -d /tmp/opam2web-content.XXXX)
 cp -r ~/git/opam2web/content/* $CONTENT
-git clone git://github.com/ocaml/opam.wiki.git $CONTENT/doc
-git clone git://github.com/ocaml/opam $CONTENT/opam-tmp
+git clone git://github.com/ocaml/opam.wiki.git $CONTENT/doc --depth 1
+git clone git://github.com/ocaml/opam $CONTENT/opam-tmp --depth 1
 mkdir $CONTENT/doc/1.2
 cp $CONTENT/opam-tmp/doc/pages/* $CONTENT/doc/1.2
 rm -rf CONTENT/opam-tmp
-git clone git://github.com/ocaml/platform-blog.git $CONTENT/blog
+git clone git://github.com/ocaml/platform-blog.git $CONTENT/blog --depth 1
 trap "rm -rf /tmp/${CONTENT#/tmp/}" EXIT
 
 cp -r -L ~/local/share/opam2web $WWW_NEW/ext
