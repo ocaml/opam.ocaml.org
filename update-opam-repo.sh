@@ -49,7 +49,20 @@ umask 002
 date > $WWW_NEW/lastlog.txt
 echo >> $WWW_NEW/lastlog.txt
 echo "============= opam-admin make ============" >> $WWW_NEW/lastlog.txt
+cp repo repo.orig
+echo 'redirect: "https://opam.ocaml.org/1.1" { opam-version < "1.2" }' >> repo
 $BIN/opam-admin make |& tee -a $WWW_NEW/lastlog.txt
+
+echo "============= generate 1.1 repo ==========" >> $WWW_NEW/lastlog.txt
+mkdir 1.1
+cp -a compilers packages version archives 1.1
+cp -a repo.orig 1.1/repo
+cd 1.1
+$BIN/to_1_1.ml |& tee -a $WWW_NEW/lastlog.txt
+echo 'redirect: "https://opam.ocaml.org" { opam-version >= "1.2" }' >> repo
+$BIN/opam-admin make -i |& tee -a $WWW_NEW/lastlog.txt
+cd ..
+
 
 CONTENT=$(mktemp -d /tmp/opam2web-content.XXXX)
 cp -r ~/git/opam2web/content/* $CONTENT

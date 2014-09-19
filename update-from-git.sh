@@ -28,6 +28,7 @@ case $repo in
         ./configure -prefix ~/local
         make
         make install libinstall
+	cp admin-scripts/*.ml ~/local/bin
         ;;
     "opamfu")
         make uninstall || true
