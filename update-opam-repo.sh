@@ -95,6 +95,9 @@ $BIN/opam2web \
 #     |& tee -a $WWW_NEW/lastlog.txt
 # ln -s ../ext .
 
+# Serve up-to-date bytecode compat scripts to be used by Travis
+cp $BIN/repo_compat_1_1.byte401 $BIN/repo_compat_1_1.byte402 .
+
 cd
 
 echo "SUCCESS" >> $WWW_NEW/lastlog.txt

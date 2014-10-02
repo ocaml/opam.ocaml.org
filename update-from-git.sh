@@ -29,6 +29,15 @@ case $repo in
         make
         make install libinstall
 	cp admin-scripts/*.ml ~/local/bin
+        [ "4.01.0" = "$(opam config var ocaml-version)" ]
+        make -C admin-scripts to_1_1
+        mv admin-scripts/to_1_1 ~/local/bin/repo_compat_1_1.byte401
+        make clean
+        opam config exec --switch 4.02.0 -- make all libinstall
+        cd admin-scripts
+        opam config exec --switch 4.02.0 -- make to_1_1
+        mv to_1_1 ~/local/bin/repo_compat_1_1.byte402
+        cd ..
         ;;
     "opamfu")
         make uninstall || true
