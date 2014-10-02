@@ -31,13 +31,16 @@ case $repo in
 	cp admin-scripts/*.ml ~/local/bin
         [ "4.01.0" = "$(opam config var ocaml-version)" ]
         make -C admin-scripts to_1_1
-        mv admin-scripts/to_1_1 ~/local/bin/repo_compat_1_1.byte401
-        make clean
-        opam config exec --switch 4.02.0 -- make all libinstall
-        cd admin-scripts
-        opam config exec --switch 4.02.0 -- make to_1_1
-        mv to_1_1 ~/local/bin/repo_compat_1_1.byte402
-        cd ..
+        mv admin-scripts/to_1_1 ~/local/bin/repo_compat_1_1.byte4.01
+        for ocamlv in 3.12.1 4.00.1 4.02.0; do
+            make clean
+            opam config exec --switch $ocamlv -- ./configure -prefix ~/.opam/$ocamlv
+            opam config exec --switch $ocamlv -- make all libinstall
+            cd admin-scripts
+            opam config exec --switch $ocamlv -- make to_1_1
+            mv to_1_1 ~/local/bin/repo_compat_1_1.byte${ocamlv%.*}
+            cd ..
+        done
         ;;
     "opamfu")
         make uninstall || true
