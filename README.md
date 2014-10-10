@@ -19,21 +19,35 @@ opam.ocaml.org is hosted on a Debian VM ; @avsm, @samoht and @AltGr have account
 ```
 
 The scripts include:
+
 * `cron-wrapper.sh` fills the logs and reports failures by mail to opam-commits@
 * `update-from-git.sh` synchronises sources in `git/` with git remotes
 * `update-opam-repo.sh` synches the opam repo and web page (runs `opam-admin make` and `opam2web`)
 
 ## What is done manually
+
 * Update these scripts:
-```
-cd git/scripts && git pull
-```
+
+    ```
+    cd git/scripts && git pull
+    ```
 * Update the server config:
-```
-cp nginx.conf /etc/nginx/sites-available/default
-kill -HUP $(cat /var/run/nginx.pid)
-```
+
+    ```
+    cp nginx.conf /etc/nginx/sites-available/default
+    kill -HUP $(cat /var/run/nginx.pid)
+    ```
 * Update the crontab:
-```
-crontab crontab
-```
+
+    ```
+    crontab crontab
+    ```
+
+## Pre-requirements
+
+* OPAM installed with 3.12.1, 4.00.1, 4.01.0 and 4.02.0 switches, each with the
+  minimal OPAM requirements (as of writing: `cmdliner.0.9.5 cudf.0.7
+  dose.3.2.2+opam jsonm.0.9.1 ocamlgraph.1.8.5 re.1.2.2`).
+
+* A main, currently selected switch including in addition cow, js_of_ocaml and
+  hevea.
