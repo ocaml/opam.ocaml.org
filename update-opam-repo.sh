@@ -9,6 +9,7 @@ REPO=git://github.com/ocaml/opam-repository.git
 BRANCH=master
 URL=https://opam.ocaml.org/
 BIN=~/local/bin
+DOC=~/local/share/doc
 
 WWW=~/www
 
@@ -85,18 +86,11 @@ $BIN/opam2web \
     path:. \
     |& tee -a $WWW_NEW/lastlog.txt
 
-# echo >> $WWW_NEW/lastlog.txt
-# echo "================ opam2web (1.0) ================" >> $WWW_NEW/lastlog.txt
-# mkdir -p "1.0" && cd "1.0"
-# $BIN/opam2web \
-#     --content $CONTENT \
-#     --statistics ~/var/log/ocamlpro/access.log \
-#     path:.. \
-#     |& tee -a $WWW_NEW/lastlog.txt
-# ln -s ../ext .
-
 # Serve up-to-date bytecode compat scripts to be used by Travis
 cp $BIN/repo_compat_1_1.byte* .
+# And html manual
+mkdir ./doc/manual
+cp -r $DOC/* ./doc/manual
 
 cd
 

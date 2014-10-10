@@ -29,6 +29,9 @@ case $repo in
         make
         make install libinstall
 	cp admin-scripts/*.ml ~/local/bin
+        make -C doc/dev-manual dev-manual.html
+        mkdir -p ~/local/share/doc
+        cp doc/dev-manual/dev-manual.{html,css,pdf} ~/local/share/doc
         [ "4.01.0" = "$(opam config var ocaml-version)" ]
         make -C admin-scripts to_1_1
         mv admin-scripts/to_1_1 ~/local/bin/repo_compat_1_1.byte4.01
