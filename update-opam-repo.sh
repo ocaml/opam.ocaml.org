@@ -67,10 +67,12 @@ cd ..
 
 CONTENT=$(mktemp -d /tmp/opam2web-content.XXXX)
 cp -r ~/git/opam2web/content/* $CONTENT
-git clone git://github.com/ocaml/opam.wiki.git $CONTENT/doc --depth 1
+mkdir -p $CONTENT/doc/1.1
+git clone git://github.com/ocaml/opam.wiki.git $CONTENT/doc/1.1 --depth 1
 git clone git://github.com/ocaml/opam.git $CONTENT/opam-tmp --depth 1
-mkdir $CONTENT/doc/1.2
-cp $CONTENT/opam-tmp/doc/pages/* $CONTENT/doc/1.2
+cp $CONTENT/opam-tmp/doc/pages/* $CONTENT/doc/
+ln -sf $CONTENT/doc $CONTENT/doc/1.2
+
 git clone git://github.com/ocaml/platform-blog.git $CONTENT/blog --depth 1
 trap "rm -rf /tmp/${CONTENT#/tmp/}" EXIT
 
