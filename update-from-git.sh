@@ -48,7 +48,7 @@ case $repo in
     "opam2")
         ./configure -prefix ~/local
         make
-        make -C doc html man-html pages
+        make -C doc html pages
         mkdir -p ~/local/share/doc/2.0
         cp -r doc/html ~/local/share/doc/2.0/api
         cp -r doc/pages ~/local/share/doc/2.0/manual
