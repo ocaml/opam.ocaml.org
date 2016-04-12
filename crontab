@@ -21,6 +21,7 @@
 # 
 
 # m h  dom mon dow   command
+  0 1  *   *   *     /home/opam/local/bin/cron-wrapper.sh update-opam update-from-git.sh opam2 next
   0 2  *   *   *     /home/opam/local/bin/cron-wrapper.sh update-opam update-from-git.sh opam 1.2
  30 2  *   *   *     /home/opam/local/bin/cron-wrapper.sh update-opamfu update-from-git.sh opamfu
   0 3  *   *   *     /home/opam/local/bin/cron-wrapper.sh update-opam2web update-from-git.sh opam2web
