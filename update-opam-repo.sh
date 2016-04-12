@@ -77,6 +77,10 @@ cp -a repo 2.0~dev
 cp -a compilers packages version 2.0~dev
 cp -al archives 2.0~dev
 cd 2.0~dev
+mkdir -p packages/ocaml/ocaml.system/files
+wget https://raw.githubusercontent.com/ocaml/opam-repository/next/packages/ocaml/ocaml.system/opam -O packages/ocaml/ocaml.system/opam
+wget https://raw.githubusercontent.com/ocaml/opam-repository/next/packages/ocaml/ocaml.system/files/gen.sh -O packages/ocaml/ocaml.system/files/gen.sh
+chmod a+x packages/ocaml/ocaml.system/files/gen.sh
 $BIN/1_2_to_2_0 |& tee -a $WWW_NEW/lastlog.txt
 echo "redirect: \"$URL\" { opam-version < \"2.0~~\" }" >> repo
 $BIN/opam-admin make |& tee -a $WWW_NEW/lastlog.txt
