@@ -51,16 +51,7 @@ date > $WWW_NEW/lastlog.txt
 echo >> $WWW_NEW/lastlog.txt
 echo "============= opam-admin make ============" >> $WWW_NEW/lastlog.txt
 mkdir 1.1
-mkdir 1.3
-cp -a repo 1.3
 #cp -a repo 1.1
-# Dispatch all non-standard versions
-cat <<EOF >>repo
-redirect: [
-  "https://opam.ocaml.org/1.3" { opam-version >= "1.3" }
-  "${URL}1.1" { opam-version < "1.2" }
-]
-EOF
 $BIN/opam-admin make |& tee -a $WWW_NEW/lastlog.txt
 
 # Compat repos, in subdirectories. Redirect to main if version doesn't match.
@@ -75,15 +66,29 @@ cp -al $WWW/1.1/* $WWW_NEW/1.1/
 # $BIN/opam-admin make -i |& tee -a $WWW_NEW/lastlog.txt
 # cd ..
 
-echo "============= generate 1.3 (dev) repo ==========" >> $WWW_NEW/lastlog.txt
-cp -a compilers packages version 1.3
-cp -al archives 1.3
-cd 1.3
-# $BIN/to_1_3.ml |& tee -a $WWW_NEW/lastlog.txt # No rewriting yet
-echo 'redirect: "https://opam.ocaml.org" { opam-version < "1.3" }' >> repo
-$BIN/opam-admin make -i |& tee -a $WWW_NEW/lastlog.txt
+echo "============= generate 1.3 (dev) redirect ==========" >> $WWW_NEW/lastlog.txt
+# No longer used, just redirect
+mkdir 1.3
+echo "redirect: \"$URL\"" >> $WWW_NEW/1.3/repo
+
+echo "============= generate 2.0~dev repo ==========" >> $WWW_NEW/lastlog.txt
+mkdir 2.0~dev
+cp -a repo 2.0~dev
+cp -a compilers packages version 2.0~dev
+cp -al archives 2.0~dev
+cd 2.0~dev
+$BIN/1_2_to_2_0 |& tee -a $WWW_NEW/lastlog.txt
+echo "redirect: \"$URL\" { opam-version < \"2.0~~\" }" >> repo
+$BIN/opam-admin make |& tee -a $WWW_NEW/lastlog.txt
 cd ..
 
+# Dispatch all non-standard versions
+cat <<EOF >>repo
+redirect: [
+  "${URL}1.1" { opam-version < "1.2" }
+  "${URL}2.0~dev" { opam-version >= "2.0~~" }
+]
+EOF
 
 CONTENT=$(mktemp -d /tmp/opam2web-content.XXXX)
 cp -r ~/git/opam2web/content/* $CONTENT
