@@ -99,6 +99,8 @@ mkdir -p $CONTENT/doc/1.1
 git clone git://github.com/ocaml/opam.wiki.git $CONTENT/doc/1.1 --depth 1
 git clone git://github.com/ocaml/opam.git $CONTENT/opam-tmp --depth 1
 cp $CONTENT/opam-tmp/doc/pages/* $CONTENT/doc/
+mkdir -p $CONTENT/doc/2.0
+cd $CONTENT/opam-tmp && git fetch next && git checkout next && cp doc/pages/* $CONTENT/doc/2.0
 ln -sf $CONTENT/doc $CONTENT/doc/1.2
 
 git clone git://github.com/ocaml/platform-blog.git $CONTENT/blog --depth 1
@@ -123,6 +125,7 @@ ln -s /logs/builds
 # And install html manual
 mkdir ./doc/manual
 cp -r $DOC/* ./doc/manual
+mv ./doc/manual/2.0 doc/
 
 cd
 
