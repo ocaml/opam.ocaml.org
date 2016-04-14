@@ -51,7 +51,15 @@ date > $WWW_NEW/lastlog.txt
 echo >> $WWW_NEW/lastlog.txt
 echo "============= opam-admin make ============" >> $WWW_NEW/lastlog.txt
 mkdir 1.1
-#cp -a repo 1.1
+mkdir 2.0~dev
+cp -a repo 2.0~dev
+# Dispatch all non-standard versions
+cat <<EOF >>repo
+redirect: [
+  "${URL}1.1" { opam-version < "1.2" }
+  "${URL}2.0~dev" { opam-version >= "2.0~~" }
+]
+EOF
 $BIN/opam-admin make |& tee -a $WWW_NEW/lastlog.txt
 
 # Compat repos, in subdirectories. Redirect to main if version doesn't match.
@@ -72,8 +80,6 @@ mkdir 1.3
 echo "redirect: \"$URL\"" >> $WWW_NEW/1.3/repo
 
 echo "============= generate 2.0~dev repo ==========" >> $WWW_NEW/lastlog.txt
-mkdir 2.0~dev
-cp -a repo 2.0~dev
 cp -a compilers packages version 2.0~dev
 cp -al archives 2.0~dev
 cd 2.0~dev
@@ -86,13 +92,6 @@ echo "redirect: \"$URL\" { opam-version < \"2.0~~\" }" >> repo
 $BIN/opam-admin make |& tee -a $WWW_NEW/lastlog.txt
 cd ..
 
-# Dispatch all non-standard versions
-cat <<EOF >>repo
-redirect: [
-  "${URL}1.1" { opam-version < "1.2" }
-  "${URL}2.0~dev" { opam-version >= "2.0~~" }
-]
-EOF
 
 CONTENT=$(mktemp -d /tmp/opam2web-content.XXXX)
 cp -r ~/git/opam2web/content/* $CONTENT
