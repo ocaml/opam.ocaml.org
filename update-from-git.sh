@@ -49,9 +49,8 @@ case $repo in
         ./configure -prefix ~/local
         make
         make -C doc html
-        mkdir -p ~/local/share/doc/2.0
-        cp -r doc/html ~/local/share/doc/2.0/api
-        cp -r doc/pages ~/local/share/doc/2.0/
+        mkdir -p ~/local/share/doc/2.0/api
+        cp -r doc/html/* ~/local/share/doc/2.0/api/
         make -C admin-scripts 1_2_to_2_0
         mv admin-scripts/1_2_to_2_0 ~/local/bin/repo_1_2_to_2_0
         ;;

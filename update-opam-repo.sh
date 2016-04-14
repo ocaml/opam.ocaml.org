@@ -125,8 +125,8 @@ cp $BIN/repo_compat_1_1.byte* .
 ln -s /logs/builds
 # And install html manual
 mkdir ./doc/manual
-cp -r $DOC/* ./doc/manual
-rm -rf ./doc/manual/2.0
+cp $DOC/dev-manual.* ./doc/manual
+cp -r $DOC/2.0/* ./doc/2.0/
 
 cd
 
