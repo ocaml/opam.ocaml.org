@@ -77,7 +77,11 @@ cp -al $WWW/1.1/* $WWW_NEW/1.1/
 echo "============= generate 1.3 (dev) redirect ==========" >> $WWW_NEW/lastlog.txt
 # No longer used, just redirect
 mkdir 1.3
+cd 1.3
 echo "redirect: \"$URL\"" >> $WWW_NEW/1.3/repo
+mkdir packages # or opam-admin complains
+opam-admin make -i
+cd ..
 
 echo "============= generate 2.0~dev repo ==========" >> $WWW_NEW/lastlog.txt
 cp -a compilers packages version 2.0~dev
