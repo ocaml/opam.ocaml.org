@@ -101,10 +101,10 @@ CONTENT=$(mktemp -d /tmp/opam2web-content.XXXX)
 cp -r ~/git/opam2web/content/* $CONTENT
 mkdir -p $CONTENT/doc/1.1
 git clone git://github.com/ocaml/opam.wiki.git $CONTENT/doc/1.1 --depth 1
-git clone git://github.com/ocaml/opam.git $CONTENT/opam-tmp --depth 1
+git clone git://github.com/ocaml/opam.git $CONTENT/opam-tmp -b 1.2 --depth 1
 cp $CONTENT/opam-tmp/doc/pages/* $CONTENT/doc/
 mkdir -p $CONTENT/doc/2.0
-cd $CONTENT/opam-tmp && git fetch next && git checkout next && cp doc/pages/* $CONTENT/doc/2.0
+cd $CONTENT/opam-tmp && git fetch origin master && git checkout master && cp doc/pages/* $CONTENT/doc/2.0
 cd $WWW_NEW
 ln -sf $CONTENT/doc $CONTENT/doc/1.2
 
