@@ -52,8 +52,7 @@ case $repo in
         mkdir -p ~/local/share/doc/2.0/api
         rm -rf ~/local/share/doc/2.0/api/*
         cp -r doc/html/* ~/local/share/doc/2.0/api/
-        make -C admin-scripts 1_2_to_2_0
-        mv admin-scripts/1_2_to_2_0 ~/local/bin/repo_1_2_to_2_0
+        cp src/opam-admin ~/local/bin/opam-admin.2.0
         ;;
     "opamfu")
         make uninstall || true
