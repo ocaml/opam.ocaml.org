@@ -48,10 +48,13 @@ case $repo in
     "opam2")
         ./configure -prefix ~/local
         make
-        make -C doc html
+        make -C doc html man-html
         mkdir -p ~/local/share/doc/2.0/api
         rm -rf ~/local/share/doc/2.0/api/*
         cp -r doc/html/* ~/local/share/doc/2.0/api/
+        mkdir -p ~/local/share/doc/2.0/man
+        rm -rf ~/local/share/doc/2.0/man/*
+        cp -r doc/man-html/* ~/local/share/doc/2.0/man/
         cp src/opam-admin ~/local/bin/opam-admin.2.0
         ;;
     "opamfu")

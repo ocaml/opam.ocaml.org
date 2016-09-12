@@ -128,6 +128,8 @@ mkdir ./doc/manual
 cp $DOC/dev-manual.* ./doc/manual
 mkdir -p ./doc/2.0/api/
 cp -r $DOC/2.0/api/* ./doc/2.0/api/
+mkdir -p ./doc/2.0/man/
+cp -r $DOC/2.0/man/* ./doc/2.0/man/
 
 cd
 
