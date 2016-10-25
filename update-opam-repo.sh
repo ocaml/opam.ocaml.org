@@ -66,13 +66,6 @@ $BIN/opam-admin make |& tee -a $WWW_NEW/lastlog.txt
 echo "============= copy 1.1 repo ==========" >> $WWW_NEW/lastlog.txt
 # Updates to the 1.1 mirror disabled
 cp -al $WWW/1.1/* $WWW_NEW/1.1/
-# cp -a compilers packages version 1.1
-# cp -al archives 1.1
-# cd 1.1
-# $BIN/to_1_1.ml |& tee -a $WWW_NEW/lastlog.txt
-# echo 'redirect: "https://opam.ocaml.org" { opam-version >= "1.2" }' >> repo
-# $BIN/opam-admin make -i |& tee -a $WWW_NEW/lastlog.txt
-# cd ..
 
 echo "============= generate 1.3 (dev) redirect ==========" >> $WWW_NEW/lastlog.txt
 # No longer used, just redirect

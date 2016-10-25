@@ -4,9 +4,10 @@ opam.ocaml.org is hosted on a Debian VM ; @avsm, @samoht and @AltGr have account
 ```
  ~opam
  |-- git
- |   |-- opam     (auto-updated, reset, compiled and installed every night)
- |   |-- opamfu   (auto-updated, reset, compiled and installed every night)
- |   |-- opam2web (auto-updated, reset, compiled and installed every night)
+ |   |-- opam     (branch 1.2; updated every night)
+ |   |-- opam2    (branch master; updated every night)
+ |   |-- opamfu   (updated, reset, compiled and installed every night)
+ |   |-- opam2web (updated, reset, compiled and installed every night)
  |   `-- scripts  (no auto-update: git pull manually)
  |-- local        (where the above are installed)
  |   |-- bin      (contains the binaries and symlinks to the scripts)
@@ -21,12 +22,20 @@ opam.ocaml.org is hosted on a Debian VM ; @avsm, @samoht and @AltGr have account
 The scripts include:
 
 * `cron-wrapper.sh` fills the logs and reports failures by mail to opam-commits@
-* `update-from-git.sh` synchronises sources in `git/` with git remotes
-* `update-opam-repo.sh` synches the opam repo and web page (runs `opam-admin make` and `opam2web`)
+* `update-from-git.sh` synchronises sources in `git/` with git remotes,
+  recompiles and installs, with specific instructions depending on the target
+  (e.g. `opam2` installs the needed tools, e.g. opam-admin, into specific
+  dir/filenames to not overlap with `opam`)
+* `update-opam-repo.sh` synches the opam repo from github and upgrades. It works
+  on `~/www-new/`, but keeps the `archives/` and `1.1/` subdirectories along
+  from `~/www/` before updating. The archives and indexes are updated
+  (`opam-admin`), version-migrated mirrors are put in place (`opam-admin.2.0`),
+  the documentation is regenerated, as well as the website, including blog and
+  statistics (`opam2web`). Then `www-new` is swapped for `www` if successful.
 
-## What is done manually
+## What is updated only manually
 
-* Update these scripts:
+* Update of these scripts:
 
     ```
     cd git/scripts && git pull
@@ -43,11 +52,21 @@ The scripts include:
     crontab crontab
     ```
 
-## Pre-requirements
+## Pre-requirements and initialisation
 
-* OPAM installed with 3.12.1, 4.00.1, 4.01.0 and 4.02.0 switches, each with the
-  minimal OPAM requirements (as of writing: `cmdliner.0.9.5 cudf.0.7
-  dose.3.2.2+opam jsonm.0.9.1 ocamlgraph.1.8.5 re.1.2.2`).
+Additionally to the above:
 
-* A main, currently selected switch including in addition cow, js_of_ocaml and
-  hevea.
+* An initialised opam 1.2.2 root with a working switch suitable for compilation
+  of opam and the tools is required (`ocaml.4.01.0 cmdliner.0.9.5 cudf.0.7
+  dose.3.2.2+opam jsonm.0.9.1 ocamlgraph.1.8.5 re.1.2.2` for opam, `hevea` for
+  the manual, `js_of_ocaml cow` for opamfu/opam2web),
+
+* The folders below `~opam/git/` need an initial clone for the update script to
+  operate ; run the `update-from-git.sh` script for each of them (see crontab)
+  at least once before running `update-opam-repo.sh`
+
+* A clone of the opam-repository git at `~opam/www` is required for
+  `update-opam-repo.sh` to bootstrap. Include `archives/`, `urls.txt`,
+  `index.tar.gz` to keep incremental archive rebuilds.
+
+* Ensure `~opam/var/log` and `~/local/{bin,share}` exist.
