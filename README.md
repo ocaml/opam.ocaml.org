@@ -70,3 +70,8 @@ Additionally to the above:
   `index.tar.gz` to keep incremental archive rebuilds.
 
 * Ensure `~opam/var/log` and `~/local/{bin,share}` exist.
+
+* The computation of the statistics in `update-opam-repo.sh` assumes log files
+  at `~opam/var/log/ocamlpro/access.log` (older) and `~/var/log/access.log` (as
+  configured by the included nginx.conf). This takes a long time, so `opam2web`
+  uses a cache at `~/.cache/opam2web/stats_cache`.
