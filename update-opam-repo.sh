@@ -78,10 +78,13 @@ cd ..
 
 echo "============= generate 2.0~dev repo ==========" >> $WWW_NEW/lastlog.txt
 cp -a compilers packages version 2.0~dev
-cp -al archives 2.0~dev
+cp -al $WWW/2.0~dev/cache 2.0~dev/ || true
 cd 2.0~dev
 $BIN/opam-admin.2.0 upgrade-format |& tee -a $WWW_NEW/lastlog.txt
-echo "redirect: \"$URL\" { opam-version < \"2.0~~\" }" >> repo
+cat <<EOF >>repo
+redirect: "$URL" { opam-version < "2.0~~" }
+archive-mirrors: "${URL}2.0~dev/cache"
+EOF
 $BIN/opam-admin.2.0 make |& tee -a $WWW_NEW/lastlog.txt
 cd ..
 
