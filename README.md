@@ -57,9 +57,10 @@ The scripts include:
 Additionally to the above:
 
 * An initialised opam 1.2.2 root with a working switch suitable for compilation
-  of opam and the tools is required (`ocaml.4.01.0 cmdliner.0.9.5 cudf.0.7
-  dose.3.2.2+opam jsonm.0.9.1 ocamlgraph.1.8.5 re.1.2.2` for opam, `hevea` for
-  the manual, `js_of_ocaml cow` for opamfu/opam2web),
+  of opam 1.2 and 2.0, and the tools is required (`ocaml.4.01.0 cmdliner.0.9.5
+  cudf.0.7 dose.3.2.2+opam jsonm.0.9.1 ocamlgraph.1.8.5 re.1.2.2` for opam, add
+  `opam-file-format` for opam2, `hevea` for the manual, `js_of_ocaml cow` for
+  opamfu/opam2web),
 
 * The folders below `~opam/git/` need an initial clone for the update script to
   operate ; run the `update-from-git.sh` script for each of them (see crontab)
