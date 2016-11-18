@@ -124,6 +124,10 @@ ln -s /logs/builds
 # And install html manual
 mkdir ./doc/manual
 cp $DOC/dev-manual.* ./doc/manual
+mkdir -p ./doc/1.2/api/
+cp -r $DOC/1.2/api/* ./doc/1.2/api/
+mkdir -p ./doc/1.3/api/
+cp -r $DOC/1.3/api/* ./doc/1.3/api/
 mkdir -p ./doc/2.0/api/
 cp -r $DOC/2.0/api/* ./doc/2.0/api/
 mkdir -p ./doc/2.0/man/

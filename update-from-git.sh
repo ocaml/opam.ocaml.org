@@ -30,8 +30,11 @@ case $repo in
         make install libinstall
 	cp admin-scripts/*.ml ~/local/bin
         make -C doc/dev-manual dev-manual.html
-        mkdir -p ~/local/share/doc
+        make -C doc html
+        mkdir -p ~/local/share/doc/$BRANCH
         cp doc/dev-manual/dev-manual.{html,css,pdf} ~/local/share/doc
+        rm -rf ~/local/share/doc/$BRANCH/api
+        cp -r doc/html ~/local/share/doc/$BRANCH/api
         ;;
     "opam2")
         ./configure -prefix ~/local
