@@ -46,7 +46,7 @@ case $repo in
         mkdir -p ~/local/share/doc/2.0/man
         rm -rf ~/local/share/doc/2.0/man/*
         cp -r doc/man-html/* ~/local/share/doc/2.0/man/
-        cp src/opam-admin ~/local/bin/opam-admin.2.0
+        cp src/opam ~/local/bin/opam2
         ;;
     "opamfu")
         make uninstall || true

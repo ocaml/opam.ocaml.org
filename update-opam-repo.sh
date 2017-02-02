@@ -49,44 +49,45 @@ cp $WWW/index.tar.gz $WWW/urls.txt .
 umask 002
 date > $WWW_NEW/lastlog.txt
 echo >> $WWW_NEW/lastlog.txt
-echo "============= opam-admin make ============" >> $WWW_NEW/lastlog.txt
-mkdir 1.1
-mkdir 2.0~dev
-cp -a repo 2.0~dev
+
 # Dispatch all non-standard versions
 cat <<EOF >>repo
 redirect: [
   "${URL}1.1" { opam-version < "1.2" }
-  "${URL}2.0~dev" { opam-version >= "2.0~~" }
 ]
 EOF
-$BIN/opam-admin make |& tee -a $WWW_NEW/lastlog.txt
+
+# Older, no longer in use repositories, just put in inconditional redirects to
+# top-level
+make_redirect() {
+    mkdir $1
+    cd $1
+    echo "redirect: [ \"${URL}\" ]" > repo
+    tar czf index.tar.gz repo
+    md5=$(md5sum repo | cut -d' ' -f1)
+    echo -e "repo\t$md5\t420" > urls.txt
+    cd ..
+}
+make_redirect 1.3
+make_redirect 2.0~dev
 
 # Compat repos, in subdirectories. Redirect to main if version doesn't match.
 echo "============= copy 1.1 repo ==========" >> $WWW_NEW/lastlog.txt
-# Updates to the 1.1 mirror disabled
+# Updates to the 1.1 mirror disabled, copy unchanged (redirect is included)
+mkdir $WWW_NEW/1.1
 cp -al $WWW/1.1/* $WWW_NEW/1.1/
 
-echo "============= generate 1.3 (dev) redirect ==========" >> $WWW_NEW/lastlog.txt
-# No longer used, just redirect
-mkdir 1.3
-cd 1.3
-echo "redirect: \"$URL\"" >> $WWW_NEW/1.3/repo
-mkdir packages # or opam-admin complains
-opam-admin make -i
+echo "============= generate 2.0 repo ==========" >> $WWW_NEW/lastlog.txt
+$BIN/opam2 admin upgrade --mirror="$URL" |& tee -a $WWW_NEW/lastlog.txt
+cp -al $WWW/2.0/cache 2.0/ || cp -al $WWW/2.0~dev/cache 2.0/ || true
+cd 2.0
+$BIN/opam2 admin cache --link=archives |& tee -a $WWW_NEW/lastlog.txt
+$BIN/opam2 admin index |& tee -a $WWW_NEW/lastlog.txt
 cd ..
 
-echo "============= generate 2.0~dev repo ==========" >> $WWW_NEW/lastlog.txt
-cp -a compilers packages version 2.0~dev
-cp -al $WWW/2.0~dev/cache 2.0~dev/ || true
-cd 2.0~dev
-$BIN/opam-admin.2.0 upgrade-format |& tee -a $WWW_NEW/lastlog.txt
-cat <<EOF >>repo
-redirect: "$URL" { opam-version < "2.0~~" }
-archive-mirrors: "${URL}2.0~dev/cache"
-EOF
-$BIN/opam-admin.2.0 make |& tee -a $WWW_NEW/lastlog.txt
-cd ..
+# Needs to be last to include changes to the 'repo' file
+echo "============= Generate 1.2 archives and index ============" >> $WWW_NEW/lastlog.txt
+$BIN/opam-admin make |& tee -a $WWW_NEW/lastlog.txt
 
 
 CONTENT=$(mktemp -d /tmp/opam2web-content.XXXX)
