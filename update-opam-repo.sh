@@ -82,7 +82,7 @@ $BIN/opam2 admin upgrade --mirror="$URL" |& tee -a $WWW_NEW/lastlog.txt
 cp -al $WWW/2.0/cache 2.0/ || cp -al $WWW/2.0~dev/cache 2.0/ || true
 cd 2.0
 $BIN/opam2 admin cache --link=archives |& tee -a $WWW_NEW/lastlog.txt
-$BIN/opam2 admin index |& tee -a $WWW_NEW/lastlog.txt
+$BIN/opam2 admin index --full-urls-txt |& tee -a $WWW_NEW/lastlog.txt
 cd ..
 
 # Needs to be last to include changes to the 'repo' file
