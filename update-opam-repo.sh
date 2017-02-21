@@ -104,8 +104,10 @@ cp -r -L ~/local/share/opam2web $WWW_NEW/ext
 
 echo >> $WWW_NEW/lastlog.txt
 echo "================ opam2web ================" >> $WWW_NEW/lastlog.txt
+APACHELOGS=(~/var/log/ocamlpro/access.log ~/var/log/access*.log)
 $BIN/opam2web \
     --content $CONTENT \
+    ${APACHELOGS[*]/#/--statistics=} \
     --statistics ~/var/log/ocamlpro/access.log \
     --statistics ~/var/log/access.log \
     --root $URL \
