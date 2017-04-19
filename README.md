@@ -57,14 +57,15 @@ The scripts include:
 Additionally to the above:
 
 * An initialised opam 1.2.2 root with a working switch suitable for compilation
-  of opam 1.2 and 2.0, and the tools is required (`ocaml.4.01.0 cmdliner.0.9.5
-  cudf.0.7 dose.3.2.2+opam jsonm.0.9.1 ocamlgraph.1.8.5 re.1.2.2` for opam, add
-  `opam-file-format` for opam2, `hevea` for the manual, `js_of_ocaml cow` for
-  opamfu/opam2web),
+  of opam 1.3 and 2.0, and the tools is required (`ocaml.4.04.0 cmdliner.0.9.8
+  cudf.0.7 dose3.5.0.1 jsonm.1.0.1 ocamlgraph.1.8.7 re.1.7.1` for opam, add
+  `opam-file-format` for opam2, `hevea` for the manual, `js_of_ocaml.2.8.4
+  cow.2.2.0 for opamfu/opam2web),
 
 * The folders below `~opam/git/` need an initial clone for the update script to
   operate ; run the `update-from-git.sh` script for each of them (see crontab)
-  at least once before running `update-opam-repo.sh`
+  at least once before running `update-opam-repo.sh`. Note that opamfu and
+  opam2web use the forks at github.com/AltGr/
 
 * A clone of the opam-repository git at `~opam/www` is required for
   `update-opam-repo.sh` to bootstrap. Include `archives/`, `urls.txt`,
@@ -73,6 +74,6 @@ Additionally to the above:
 * Ensure `~opam/var/log` and `~/local/{bin,share}` exist.
 
 * The computation of the statistics in `update-opam-repo.sh` assumes log files
-  at `~opam/var/log/ocamlpro/access.log` (older) and `~/var/log/access.log` (as
+  at `~opam/var/log/access-YEAR-MONTH.log` and `~/var/log/access.log` (as
   configured by the included nginx.conf). This takes a long time, so `opam2web`
   uses a cache at `~/.cache/opam2web/stats_cache`.
