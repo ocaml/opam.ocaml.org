@@ -27,4 +27,4 @@
   0 3  *   *   *     /home/opam/local/bin/cron-wrapper.sh update-opam2web update-from-git.sh opam2web
   0 *  *   *   *     /home/opam/local/bin/cron-wrapper.sh update-opam-repo update-opam-repo.sh
 # ADD TO root's crontab:
-# 0 0  1   *   *     sh -c 'mv /home/opam/var/log/access.log /home/opam/var/log/access-$(date -d yesterday +%Y-%m).log; kill -USR1 $(cat /var/run/nginx.pid)'
+# 0 0  1   *   *     sh -c 'D=$(date -d yesterday +%Y-%m); mv /home/opam/var/log/access.log /home/opam/var/log/access-$D.log; kill -USR1 $(cat /var/run/nginx.pid); xz /home/opam/var/log/access-$D.log --stdout >/home/opam/var/log/xz/access-$D.log.xz'

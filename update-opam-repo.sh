@@ -110,7 +110,9 @@ echo >> $WWW_NEW/lastlog.txt
 echo "================ opam2web ================" >> $WWW_NEW/lastlog.txt
 # APACHELOGS=(~/var/log/ocamlpro/access.log ~/var/log/access*.log)
 MIDMONTH=$(date +%Y-%m-15)
-APACHELOGS=(~/var/log/access-$(date -d "$MIDMONTH -1 month" +%Y-%m)*.log \
+shopt -s nullglob
+APACHELOGS=(~/var/log/access-$(date -d "$MIDMONTH -2 month" +%Y-%m)*.log \
+            ~/var/log/access-$(date -d "$MIDMONTH -1 month" +%Y-%m)*.log \
             ~/var/log/access-$(date -d "$MIDMONTH" +%Y-%m)*.log \
             ~/var/log/access.log)
 $BIN/opam2web \
