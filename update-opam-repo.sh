@@ -54,6 +54,7 @@ echo >> $WWW_NEW/lastlog.txt
 cat <<EOF >>repo
 redirect: [
   "${URL}1.1" { opam-version < "1.2" }
+  "${URL}1.2.0" { opam-version < "1.2.2" }
 ]
 EOF
 
@@ -76,6 +77,10 @@ echo "============= copy 1.1 repo ==========" >> $WWW_NEW/lastlog.txt
 # Updates to the 1.1 mirror disabled, copy unchanged (redirect is included)
 mkdir $WWW_NEW/1.1
 cp -al $WWW/1.1/* $WWW_NEW/1.1/
+echo "============= copy 1.2.0 repo ==========" >> $WWW_NEW/lastlog.txt
+# Updates to the 1.2.0 mirror disabled, copy unchanged (redirect is included)
+mkdir $WWW_NEW/1.2.0
+cp -al $WWW/1.2.0/* $WWW_NEW/1.2.0/
 
 echo "============= generate 2.0 repo ==========" >> $WWW_NEW/lastlog.txt
 $BIN/opam2 admin upgrade --mirror="$URL" |& tee -a $WWW_NEW/lastlog.txt
