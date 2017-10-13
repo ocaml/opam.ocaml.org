@@ -21,7 +21,7 @@ cd ~/git/$repo
 git fetch
 git clean -fdx
 git checkout master
-git reset origin/$BRANCH --hard
+git reset origin/$BRANCH --hard || git reset refs/tags/$BRANCH --hard
 
 case $repo in
     "opam")
