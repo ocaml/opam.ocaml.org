@@ -7,6 +7,7 @@ cd
 
 REPO=git://github.com/ocaml/opam-repository.git
 BRANCH=master
+BRANCH2=2.0.0
 URL=https://opam.ocaml.org/
 BIN=~/local/bin
 DOC=~/local/share/doc
@@ -83,9 +84,11 @@ mkdir $WWW_NEW/1.2.0
 cp -al $WWW/1.2.0/* $WWW_NEW/1.2.0/
 
 echo "============= generate 2.0 repo ==========" >> $WWW_NEW/lastlog.txt
-$BIN/opam2 admin upgrade --mirror="$URL" |& tee -a $WWW_NEW/lastlog.txt
-cp -al $WWW/2.0/cache 2.0/ || cp -al $WWW/2.0~dev/cache 2.0/ || true
 cd 2.0
+git clone --local $WWW/2.0 $WWW_NEW/2.0 || git init |& tee -a $WWW_NEW/lastlog.txt
+git fetch $REPO $BRANCH2 |& tee -a $WWW_NEW/lastlog.txt
+git reset FETCH_HEAD --hard  |& tee -a $WWW_NEW/lastlog.txt
+cp -al $WWW/2.0/cache 2.0/ || true
 $BIN/opam2 admin cache --link=archives |& tee -a $WWW_NEW/lastlog.txt
 $BIN/opam2 admin index --full-urls-txt |& tee -a $WWW_NEW/lastlog.txt
 cd ..
