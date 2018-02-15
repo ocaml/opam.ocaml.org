@@ -84,11 +84,12 @@ mkdir $WWW_NEW/1.2.0
 cp -al $WWW/1.2.0/* $WWW_NEW/1.2.0/
 
 echo "============= generate 2.0 repo ==========" >> $WWW_NEW/lastlog.txt
+mkdir -p 2.0
 cd 2.0
 git clone --local $WWW/2.0 $WWW_NEW/2.0 || git init |& tee -a $WWW_NEW/lastlog.txt
 git fetch $REPO $BRANCH2 |& tee -a $WWW_NEW/lastlog.txt
 git reset FETCH_HEAD --hard  |& tee -a $WWW_NEW/lastlog.txt
-cp -al $WWW/2.0/cache 2.0/ || true
+cp -al $WWW/2.0/cache . || true
 $BIN/opam2 admin cache --link=archives |& tee -a $WWW_NEW/lastlog.txt
 $BIN/opam2 admin index --full-urls-txt |& tee -a $WWW_NEW/lastlog.txt
 cd ..
