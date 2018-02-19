@@ -56,6 +56,7 @@ cat <<EOF >>repo
 redirect: [
   "${URL}1.1" { opam-version < "1.2" }
   "${URL}1.2.0" { opam-version < "1.2.2" }
+  "${URL}2.0" { opam-version >= "2.0~" }
 ]
 EOF
 
