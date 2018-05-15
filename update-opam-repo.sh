@@ -18,6 +18,10 @@ WWW_NEW=~/www-new
 
 WWW_BAK=~/www-bak
 
+WWW2=~/www2
+WWW2_BAK=~/www2-bak
+PREVIEW="2.0-preview"
+
 TEST=""
 while [ $# -gt 0 ]; do
     case $1 in
@@ -101,6 +105,7 @@ $BIN/opam-admin make |& tee -a $WWW_NEW/lastlog.txt
 
 
 CONTENT=$(mktemp -d /tmp/opam2web-content.XXXX)
+trap "rm -rf /tmp/${CONTENT#/tmp/}" EXIT
 cp -r ~/git/opam2web/content/* $CONTENT
 mkdir -p $CONTENT/doc/1.1
 git clone git://github.com/ocaml/opam.wiki.git $CONTENT/doc/1.1 --depth 1
@@ -112,7 +117,6 @@ cd $WWW_NEW
 ln -sf $CONTENT/doc $CONTENT/doc/1.2
 
 git clone git://github.com/ocaml/platform-blog.git $CONTENT/blog --depth 1
-trap "rm -rf /tmp/${CONTENT#/tmp/}" EXIT
 
 cp -r -L ~/local/share/opam2web $WWW_NEW/ext
 
@@ -152,9 +156,51 @@ cd
 
 echo "SUCCESS" >> $WWW_NEW/lastlog.txt
 date >> $WWW_NEW/lastlog.txt
+echo >> $WWW_NEW/lastlog.txt
+
+ln -s $WWW2 $WWW_NEW/$PREVIEW
 
 if [ -z "$TEST" ]; then
     rm -rf $WWW_BAK
     mv $WWW $WWW_BAK
     mv $WWW_NEW $WWW
+fi
+
+if [ -z "$TEST" ]; then
+    WWW_NEW=~/www2-new
+else
+    WWW_NEW=~/www2-test
+fi
+
+echo "================ opam2web II ================" >> $WWW_NEW/lastlog.txt
+cd $WWW_NEW
+mkdir $CONTENT.old
+mv $CONTENT/* $CONTENT.old
+rm $CONTENT.old/doc/1.2 # it's a link
+
+cp -r ~/git/opam2web2/content/* $CONTENT
+
+mkdir -p $CONTENT/doc/1.2
+mv $CONTENT.old/doc/1.1 $CONTENT/doc
+mv $CONTENT.old/doc/2.0/* $CONTENT/doc
+mv $CONTENT.old/doc/* $CONTENT/doc/1.2
+ln -s . $CONTENT/2.0
+
+mv $CONTENT.old/blog $CONTENT
+
+cp -r -L ~/local/share/opam2web2 $WWW_NEW/ext
+
+cd $WWW2
+$BIN/opam2web2 \
+    -c $CONTENT \
+    --blog $CONTENT/blog
+    ${APACHELOGS[*]/#/--statistics=} \
+    -r $URL/$PREVIEW \
+    |& tee -a $WWW_NEW/lastlog.txt
+cd
+
+if [ -z "$TEST" ]; then
+    rm -rf $WWW2_BAK
+    mv $WWW2 $WWW2_BAK
+    mv $WWW_NEW $WWW2
 fi
