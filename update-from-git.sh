@@ -61,6 +61,13 @@ case $repo in
         mkdir -p ~/local/share/opam2web
         cp -r -L ext/* ~/local/share/opam2web
         ;;
+    "opam2web2")
+        export PREFIX=~/local
+        make
+        mkdir -p ~/local/share/opam2web2
+        cp opam2web ~/local/bin/opam2web2
+        cp -r -L ext/* ~/local/share/opam2web2
+        ;;
     *)
         echo "$repo fetched, don't know how to build"
 esac
