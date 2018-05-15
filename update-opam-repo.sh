@@ -171,9 +171,13 @@ if [ -z "$TEST" ]; then
 else
     WWW_NEW=~/www2-test
 fi
+mkdir -p $WWW_NEW
 
 echo "================ opam2web II ================" >> $WWW_NEW/lastlog.txt
 cd $WWW_NEW
+
+git clone --local $WWW/2.0 $WWW_NEW
+
 mkdir $CONTENT.old
 mv $CONTENT/* $CONTENT.old
 rm $CONTENT.old/doc/1.2 # it's a link
@@ -190,7 +194,6 @@ mv $CONTENT.old/blog $CONTENT
 
 cp -r -L ~/local/share/opam2web2 $WWW_NEW/ext
 
-cd $WWW2
 $BIN/opam2web2 \
     -c $CONTENT \
     --blog $CONTENT/blog
