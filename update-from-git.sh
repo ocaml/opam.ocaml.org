@@ -65,7 +65,7 @@ case $repo in
         export PREFIX=~/local
         make
         mkdir -p ~/local/share/opam2web2
-        cp opam2web ~/local/bin/opam2web2
+        cp -b opam2web ~/local/bin/opam2web2
         cp -r -L ext/* ~/local/share/opam2web2
         ;;
     *)

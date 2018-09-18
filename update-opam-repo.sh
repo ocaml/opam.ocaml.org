@@ -49,8 +49,11 @@ umask 002
 date > $WWW_NEW/lastlog.txt
 echo >> $WWW_NEW/lastlog.txt
 
-# Dispatch all non-standard versions
-cat <<EOF >>repo
+# Overwrite 'repo' file, and dispatch all non-standard versions
+cat <<EOF >repo
+opam-version: "1.2"
+browse: "https://opam.ocaml.org/pkg/"
+upstream: "https://github.com/ocaml/opam-repository/tree/master/"
 redirect: [
   "${URL}1.1" { opam-version < "1.2" }
   "${URL}1.2.0" { opam-version < "1.2.2" }
