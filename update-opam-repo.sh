@@ -6,8 +6,8 @@ set -o pipefail
 cd
 
 REPO=git://github.com/ocaml/opam-repository.git
+BRANCH1=1.2
 BRANCH=master
-BRANCH2=2.0.0
 URL=https://opam.ocaml.org/
 BIN=~/local/bin
 DOC=~/local/share/doc
@@ -17,10 +17,6 @@ WWW=~/www
 WWW_NEW=~/www-new
 
 WWW_BAK=~/www-bak
-
-WWW2=~/www2
-WWW2_BAK=~/www2-bak
-PREVIEW="2.0-preview"
 
 TEST=""
 while [ $# -gt 0 ]; do
@@ -47,9 +43,7 @@ cd $WWW_NEW
 git fetch $REPO $BRANCH
 git reset FETCH_HEAD --hard
 
-mkdir -p archives
-cp -al $WWW/archives/* archives/
-cp $WWW/index.tar.gz $WWW/urls.txt .
+cp -al $WWW/cache .
 
 umask 002
 date > $WWW_NEW/lastlog.txt
@@ -60,7 +54,7 @@ cat <<EOF >>repo
 redirect: [
   "${URL}1.1" { opam-version < "1.2" }
   "${URL}1.2.0" { opam-version < "1.2.2" }
-  "${URL}2.0" { opam-version >= "2.0~" }
+  "${URL}1.2.2" { opam-version < "2.0~" }
 ]
 EOF
 
@@ -77,6 +71,8 @@ make_redirect() {
 }
 make_redirect 1.3
 make_redirect 2.0~dev
+make_redirect 2.0
+
 
 # Compat repos, in subdirectories. Redirect to main if version doesn't match.
 echo "============= copy 1.1 repo ==========" >> $WWW_NEW/lastlog.txt
@@ -88,37 +84,56 @@ echo "============= copy 1.2.0 repo ==========" >> $WWW_NEW/lastlog.txt
 mkdir $WWW_NEW/1.2.0
 cp -al $WWW/1.2.0/* $WWW_NEW/1.2.0/
 
-echo "============= generate 2.0 repo ==========" >> $WWW_NEW/lastlog.txt
-mkdir -p 2.0
-cd 2.0
-git clone --local $WWW/2.0 $WWW_NEW/2.0 || git init |& tee -a $WWW_NEW/lastlog.txt
-git fetch $REPO $BRANCH2 |& tee -a $WWW_NEW/lastlog.txt
-git reset FETCH_HEAD --hard  |& tee -a $WWW_NEW/lastlog.txt
-cp -al $WWW/2.0/cache . || true
-$BIN/opam2 admin cache --link=archives |& tee -a $WWW_NEW/lastlog.txt
-$BIN/opam2 admin index --full-urls-txt |& tee -a $WWW_NEW/lastlog.txt
-cd ..
 
-# Needs to be last to include changes to the 'repo' file
 echo "============= Generate 1.2 archives and index ============" >> $WWW_NEW/lastlog.txt
+mkdir -p $WWW_NEW/1.2.2
+cd $WWW_NEW/1.2.2
+
+git fetch $REPO $BRANCH1 |& tee -a $WWW_NEW/lastlog.txt
+git reset FETCH_HEAD --hard  |& tee -a $WWW_NEW/lastlog.txt
+
+mkdir -p archives
+cp -al $WWW/1.2.2/archives/* archives/
+cp $WWW/1.2.2/index.tar.gz $WWW/urls.txt .
+
+cat <<EOF >>repo
+redirect: [
+  "${URL}" { opam-version < "1.2.0" | opam-version >= "2.0~" }
+]
+EOF
+
 $BIN/opam-admin make |& tee -a $WWW_NEW/lastlog.txt
 
 
+echo "============= generate 2.0 repo ==========" >> $WWW_NEW/lastlog.txt
+mkdir -p $WWW_NEW/2.0
+cd $WWW_NEW/2.0
+$BIN/opam2 admin cache --link=archives |& tee -a $WWW_NEW/lastlog.txt
+$BIN/opam2 admin index --minimal-urls-txt |& tee -a $WWW_NEW/lastlog.txt
+cd ..
+
+
+
+echo "============= Gather the doc ============" >> $WWW_NEW/lastlog.txt
 CONTENT=$(mktemp -d /tmp/opam2web-content.XXXX)
 trap "rm -rf /tmp/${CONTENT#/tmp/}" EXIT
 cp -r ~/git/opam2web/content/* $CONTENT
 mkdir -p $CONTENT/doc/1.1
 git clone git://github.com/ocaml/opam.wiki.git $CONTENT/doc/1.1 --depth 1
-git clone git://github.com/ocaml/opam.git $CONTENT/opam-tmp -b 1.2 --depth 1
+git clone git://github.com/ocaml/opam.git $CONTENT/opam-tmp --depth 1
 cp $CONTENT/opam-tmp/doc/pages/* $CONTENT/doc/
-mkdir -p $CONTENT/doc/2.0
-cd $CONTENT/opam-tmp && git fetch origin master && git checkout master && cp doc/pages/* $CONTENT/doc/2.0
-cd $WWW_NEW
-ln -sf $CONTENT/doc $CONTENT/doc/1.2
+
+
+mkdir -p $CONTENT/doc/1.2
+cd $CONTENT/opam-tmp && git fetch origin 1.2 && git checkout origin/1.2 && cp doc/pages/* $CONTENT/doc/1.2
+ln -sf $CONTENT/doc $CONTENT/doc/2.0
 
 git clone git://github.com/ocaml/platform-blog.git $CONTENT/blog --depth 1
 
-cp -r -L ~/local/share/opam2web $WWW_NEW/ext
+cp -r -L ~/local/share/opam2web2 $WWW_NEW/ext
+
+cd $WWW_NEW
+
 
 echo >> $WWW_NEW/lastlog.txt
 echo "================ opam2web ================" >> $WWW_NEW/lastlog.txt
@@ -129,11 +144,12 @@ APACHELOGS=(~/var/log/access-$(date -d "$MIDMONTH -1 month" +%Y-%m)*.log \
             ~/var/log/access-$(date -d "$MIDMONTH" +%Y-%m)*.log \
             ~/var/log/access.log)
 #APACHELOGS=(~/var/log/access.log)
-$BIN/opam2web \
-    --content $CONTENT \
+
+$BIN/opam2web2 \
+    -c $CONTENT \
+    --blog $CONTENT/blog \
     ${APACHELOGS[*]/#/--statistics=} \
-    --root $URL \
-    path:. \
+    -r $URL \
     |& tee -a $WWW_NEW/lastlog.txt
 
 # Serve up-to-date bytecode compat scripts to be used by Travis
@@ -147,66 +163,18 @@ mkdir -p ./doc/1.2/api/
 cp -r $DOC/1.2/api/* ./doc/1.2/api/
 mkdir -p ./doc/1.3/api/
 cp -r $DOC/1.3/api/* ./doc/1.3/api/
-mkdir -p ./doc/2.0/api/
-cp -r $DOC/2.0/api/* ./doc/2.0/api/
-mkdir -p ./doc/2.0/man/
-cp -r $DOC/2.0/man/* ./doc/2.0/man/
+ln -s . doc/2.0
+mkdir -p ./doc/api/
+cp -r $DOC/2.0/api/* ./doc/api/
+mkdir -p ./doc/2.man/
+cp -r $DOC/2.0/man/* ./doc/man/
+
+ln -s . 2.0-preview
 
 cd
-
-echo "SUCCESS" >> $WWW_NEW/lastlog.txt
-date >> $WWW_NEW/lastlog.txt
-echo >> $WWW_NEW/lastlog.txt
-
-ln -s $WWW2 $WWW_NEW/$PREVIEW
 
 if [ -z "$TEST" ]; then
     rm -rf $WWW_BAK
     mv $WWW $WWW_BAK
     mv $WWW_NEW $WWW
-fi
-
-if [ -z "$TEST" ]; then
-    WWW_NEW=~/www2-new
-else
-    WWW_NEW=~/www2-test
-fi
-rm -rf $WWW_NEW
-mkdir -p $WWW_NEW
-
-cd $WWW_NEW
-
-git clone --local $WWW/2.0 $WWW_NEW
-
-echo "================ opam2web II ================" >> $WWW_NEW/lastlog.txt
-
-mkdir $CONTENT.old
-mv $CONTENT/* $CONTENT.old
-rm $CONTENT.old/doc/1.2
-# it's a link
-
-cp -r ~/git/opam2web2/content/* $CONTENT
-
-mkdir -p $CONTENT/doc/1.2
-mv $CONTENT.old/doc/1.1 $CONTENT/doc
-mv $CONTENT.old/doc/2.0/* $CONTENT/doc
-mv $CONTENT.old/doc/* $CONTENT/doc/1.2
-ln -s . $CONTENT/2.0
-
-mv $CONTENT.old/blog $CONTENT
-
-cp -r -L ~/local/share/opam2web2 $WWW_NEW/ext
-
-$BIN/opam2web2 \
-    -c $CONTENT \
-    --blog $CONTENT/blog \
-    ${APACHELOGS[*]/#/--statistics=} \
-    -r $URL/$PREVIEW \
-    |& tee -a $WWW_NEW/lastlog.txt
-cd
-
-if [ -z "$TEST" ]; then
-    rm -rf $WWW2_BAK
-    mv $WWW2 $WWW2_BAK
-    mv $WWW_NEW $WWW2
 fi
