@@ -171,7 +171,7 @@ cp -r $DOC/1.3/api/* ./doc/1.3/api/
 ln -s . doc/2.0
 mkdir -p ./doc/api/
 cp -r $DOC/2.0/api/* ./doc/api/
-mkdir -p ./doc/2.man/
+mkdir -p ./doc/man/
 cp -r $DOC/2.0/man/* ./doc/man/
 
 ln -s . 2.0-preview
