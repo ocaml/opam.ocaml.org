@@ -89,6 +89,7 @@ cp -al $WWW/1.2.0/* $WWW_NEW/1.2.0/
 
 
 echo "============= Generate 1.2 archives and index ============" >> $WWW_NEW/lastlog.txt
+umask 0022
 git clone --local $WWW/1.2.2 $WWW_NEW/1.2.2
 cd $WWW_NEW/1.2.2
 
@@ -104,6 +105,8 @@ redirect: [
   "${URL}" { opam-version < "1.2.0" | opam-version >= "2.0~" }
 ]
 EOF
+
+umask 0002
 
 $BIN/opam-admin make |& tee -a $WWW_NEW/lastlog.txt
 
