@@ -89,7 +89,7 @@ cp -al $WWW/1.2.0/* $WWW_NEW/1.2.0/
 
 
 echo "============= Generate 1.2 archives and index ============" >> $WWW_NEW/lastlog.txt
-mkdir -p $WWW_NEW/1.2.2
+git clone --local $WWW/1.2.2 $WWW_NEW/1.2.2
 cd $WWW_NEW/1.2.2
 
 git fetch $REPO $BRANCH1 |& tee -a $WWW_NEW/lastlog.txt
@@ -97,7 +97,7 @@ git reset FETCH_HEAD --hard  |& tee -a $WWW_NEW/lastlog.txt
 
 mkdir -p archives
 cp -al $WWW/1.2.2/archives/* archives/
-cp $WWW/1.2.2/index.tar.gz $WWW/urls.txt .
+cp $WWW/1.2.2/index.tar.gz $WWW/1.2.2/urls.txt .
 
 cat <<EOF >>repo
 redirect: [
@@ -109,8 +109,7 @@ $BIN/opam-admin make |& tee -a $WWW_NEW/lastlog.txt
 
 
 echo "============= generate 2.0 repo ==========" >> $WWW_NEW/lastlog.txt
-mkdir -p $WWW_NEW/2.0
-cd $WWW_NEW/2.0
+cd $WWW_NEW
 $BIN/opam2 admin cache --link=archives |& tee -a $WWW_NEW/lastlog.txt
 $BIN/opam2 admin index --minimal-urls-txt |& tee -a $WWW_NEW/lastlog.txt
 cd ..
@@ -120,7 +119,7 @@ cd ..
 echo "============= Gather the doc ============" >> $WWW_NEW/lastlog.txt
 CONTENT=$(mktemp -d /tmp/opam2web-content.XXXX)
 trap "rm -rf /tmp/${CONTENT#/tmp/}" EXIT
-cp -r ~/git/opam2web/content/* $CONTENT
+cp -r ~/git/opam2web2/content/* $CONTENT
 mkdir -p $CONTENT/doc/1.1
 git clone git://github.com/ocaml/opam.wiki.git $CONTENT/doc/1.1 --depth 1
 git clone git://github.com/ocaml/opam.git $CONTENT/opam-tmp --depth 1
