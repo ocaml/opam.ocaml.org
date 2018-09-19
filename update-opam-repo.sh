@@ -130,7 +130,7 @@ cp $CONTENT/opam-tmp/doc/pages/* $CONTENT/doc/
 
 
 mkdir -p $CONTENT/doc/1.2
-cd $CONTENT/opam-tmp && git fetch origin 1.2 && git checkout origin/1.2 && cp doc/pages/* $CONTENT/doc/1.2
+cd $CONTENT/opam-tmp && git fetch origin 1.2 && git reset FETCH_HEAD --hard && cp doc/pages/* $CONTENT/doc/1.2
 ln -sf $CONTENT/doc $CONTENT/doc/2.0
 
 git clone git://github.com/ocaml/platform-blog.git $CONTENT/blog --depth 1
