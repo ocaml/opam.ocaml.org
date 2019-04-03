@@ -65,8 +65,8 @@ case $repo in
         export PREFIX=~/local
         make
         mkdir -p ~/local/share/opam2web2
-        cp -b opam2web ~/local/bin/opam2web2
-        cp -r -L ext/* ~/local/share/opam2web2
+	cp -b _build/install/default/bin/opam2web ~/local/bin/opam2web2
+        cp -r -L _build/install/default/share/opam2web/* ~/local/share/opam2web2
         ;;
     *)
         echo "$repo fetched, don't know how to build"
