@@ -51,7 +51,7 @@ echo >> $WWW_NEW/lastlog.txt
 
 # Overwrite 'repo' file, and dispatch all non-standard versions
 cat <<EOF >repo
-opam-version: "1.2"
+opam-version: "2.0"
 browse: "https://opam.ocaml.org/pkg/"
 upstream: "https://github.com/ocaml/opam-repository/tree/master/"
 redirect: [
@@ -168,13 +168,10 @@ mkdir -p ./doc/1.2/api/
 cp -r $DOC/1.2/api/* ./doc/1.2/api/
 mkdir -p ./doc/1.3/api/
 cp -r $DOC/1.3/api/* ./doc/1.3/api/
-ln -s . doc/2.0
 mkdir -p ./doc/api/
 cp -r $DOC/2.0/api/* ./doc/api/
 mkdir -p ./doc/man/
 cp -r $DOC/2.0/man/* ./doc/man/
-
-ln -s . 2.0-preview
 
 cd
 
