@@ -24,17 +24,18 @@ git checkout master
 git reset origin/$BRANCH --hard || git reset refs/tags/$BRANCH --hard
 
 case $repo in
-    "opam")
+    "opam") #deprecated
         ./configure -prefix ~/local
         make
-        make install libinstall
-	cp admin-scripts/*.ml ~/local/bin
+        #make install libinstall
+        cp admin-scripts/*.ml ~/local/bin
         make -C doc/dev-manual dev-manual.html
         make -C doc html
         mkdir -p ~/local/share/doc/$BRANCH
         cp doc/dev-manual/dev-manual.{html,css,pdf} ~/local/share/doc
         rm -rf ~/local/share/doc/$BRANCH/api
         cp -r doc/html ~/local/share/doc/$BRANCH/api
+        cp opam ~/local/bin/opam1.3.1
         ;;
     "opam2")
         ./configure -prefix ~/local
@@ -46,7 +47,7 @@ case $repo in
         mkdir -p ~/local/share/doc/2.0/man
         rm -rf ~/local/share/doc/2.0/man/*
         cp -r doc/man-html/* ~/local/share/doc/2.0/man/
-        cp opam ~/local/bin/opam2
+        cp opam ~/local/bin/opam
         ;;
     "opamfu")
         make uninstall || true
@@ -65,7 +66,7 @@ case $repo in
         export PREFIX=~/local
         make
         mkdir -p ~/local/share/opam2web2
-	cp -b _build/install/default/bin/opam2web ~/local/bin/opam2web2
+        cp -b _build/install/default/bin/opam2web ~/local/bin/opam2web2
         cp -r -L _build/install/default/share/opam2web/* ~/local/share/opam2web2
         ;;
     *)
