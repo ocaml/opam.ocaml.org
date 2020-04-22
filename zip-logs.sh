@@ -2,7 +2,7 @@
 
 BASE=~/var/log
 
-for f in "$BASE/access-*.log"; do
+for f in $BASE/access-*.log; do
     z="$BASE/xz/${f#$BASE/}.xz"
     if [ "$f" -nt "$z" ]; then
         echo "Zipping $f..."

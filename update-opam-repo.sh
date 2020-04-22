@@ -159,9 +159,7 @@ $BIN/opam2web2 \
 
 # Serve up-to-date bytecode compat scripts to be used by Travis
 cp $BIN/repo_compat_1_1.byte* .
-# Add symlink to bulk builds
-ln -s /logs/builds
-# And install html manual
+# And html manual
 mkdir ./doc/manual
 cp $DOC/dev-manual.* ./doc/manual
 mkdir -p ./doc/1.2/api/
