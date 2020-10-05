@@ -87,6 +87,7 @@ echo "============= copy 1.2.0 repo ==========" >> $WWW_NEW/lastlog.txt
 mkdir $WWW_NEW/1.2.0
 cp -al $WWW/1.2.0/* $WWW_NEW/1.2.0/
 
+cp $WWW/*.pgp $WWW_NEW/
 
 echo "============= Generate 1.2 archives and index ============" >> $WWW_NEW/lastlog.txt
 umask 0022
@@ -124,7 +125,7 @@ CONTENT=$(mktemp -d /tmp/opam2web-content.XXXX)
 trap "rm -rf /tmp/${CONTENT#/tmp/}" EXIT
 cp -r ~/git/opam2web2/content/* $CONTENT
 mkdir -p $CONTENT/doc/1.1
-git clone git://github.com/ocaml/opam.wiki.git $CONTENT/doc/1.1 --depth 1
+git clone git://github.com/ocaml/opam.wiki.git $CONTENT/doc/1.1 --depth 1 --branch old_wiki --single-branch
 git clone git://github.com/ocaml/opam.git $CONTENT/opam-tmp --depth 1
 cp $CONTENT/opam-tmp/doc/pages/* $CONTENT/doc/
 
