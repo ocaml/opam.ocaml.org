@@ -87,6 +87,7 @@ echo "============= copy 1.2.0 repo ==========" >> $WWW_NEW/lastlog.txt
 mkdir $WWW_NEW/1.2.0
 cp -al $WWW/1.2.0/* $WWW_NEW/1.2.0/
 
+cp $WWW/*.pgp $WWW_NEW/
 
 echo "============= Generate 1.2 archives and index ============" >> $WWW_NEW/lastlog.txt
 umask 0022
