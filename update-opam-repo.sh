@@ -114,7 +114,7 @@ $BIN/opam-admin make |& tee -a $WWW_NEW/lastlog.txt
 
 echo "============= generate 2.0 repo ==========" >> $WWW_NEW/lastlog.txt
 cd $WWW_NEW
-$BIN/opam admin cache --link=archives |& tee -a $WWW_NEW/lastlog.txt
+$BIN/opam admin cache --no-repo-update --link=archives |& tee -a $WWW_NEW/lastlog.txt
 $BIN/opam admin index --minimal-urls-txt |& tee -a $WWW_NEW/lastlog.txt
 cd ..
 
